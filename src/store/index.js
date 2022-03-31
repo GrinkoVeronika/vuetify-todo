@@ -5,6 +5,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    appTitle: process.env.VUE_APP_TITLE,
+    search: null,
+    sorting: false,
     tasks: [
       {
         id: 1,
@@ -30,8 +33,20 @@ export default new Vuex.Store({
       text: "",
     },
   },
-  getters: {},
+  getters: {
+    tasksFiltered(state) {
+      if (!state.search) {
+        return state.tasks;
+      }
+      return state.tasks.filter((task) =>
+        task.title.toLowerCase().includes(state.search.toLowerCase())
+      );
+    },
+  },
   mutations: {
+    setSearch(state, value) {
+      state.search = value;
+    },
     addTask(state, newTaskTitle) {
       let newTask = {
         id: Date.now(),
@@ -69,6 +84,9 @@ export default new Vuex.Store({
     },
     hideSnackbar(state) {
       state.snackbar.show = false;
+    },
+    toggleSorting(state) {
+      state.sorting=!state.sorting
     },
   },
   actions: {
