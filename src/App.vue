@@ -34,12 +34,12 @@
       dark
       prominent
       src="mountains.png"
-      height="170"
+      :height="$route.path === '/' ? '238' : '170'"
     >
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
-          gradient="to top right, rgba(55,236,186,.7), rgba(25,32,72,.7)"
+          gradient="to top right, rgba(55,236,186,.9), rgba(25,32,72,.9)"
         ></v-img>
       </template>
 
@@ -55,6 +55,9 @@
           }}</v-app-bar-title>
         </v-row>
         <v-row> <live-date-time /></v-row>
+        <v-row v-if="$route.path === '/'">
+          <field-add-task />
+        </v-row>
       </v-container>
     </v-app-bar>
 
@@ -74,15 +77,18 @@ export default {
       { title: "About", icon: "mdi-help-box", to: "/about" },
     ],
   }),
-
+  mounted() {
+    this.$store.dispatch("getTasks");
+  },
   components: {
     search: require("@/components/Tools/Search.vue").default,
     "live-date-time": require("@/components/Tools/LiveDateTime.vue").default,
     snackbar: require("@/components/Shared/Snackbar.vue").default,
+    "field-add-task": require("@/components/Todo/FieldAddTask.vue").default,
   },
 };
 </script>
 <style lang="sass">
 .header-container
-  max-width:none
+  max-width: none
 </style>
